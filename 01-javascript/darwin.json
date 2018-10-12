@@ -1,0 +1,9 @@
+{
+  "nombre": "Darwin",
+  "edad": 29.12,
+  "casado": null,
+  "tieneHijos": false,
+  "mascotas": {
+    "nombre": "Darwin"
+  }
+}
