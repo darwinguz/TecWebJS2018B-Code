@@ -1,66 +1,35 @@
+//resolviendo el problema del ejercicio 06-callback-propio.js con promesas
 const fs = require('fs');
 
-
-const appendFilePromise = (nombreArchivo, contenido) => new Promise((resolve, reject) => {
-    fs.readFile(nombreArchivo, 'utf-8', (error, contenidoLeidoDelArchivo) => {
+const escribirArchivo = (nombreArchivo, contenido) => new Promise((resolve, reject) => {
+    fs.writeFile(nombreArchivo, contenido, (error) => {
         if (error) {
-            fs.writeFile(nombreArchivo, contenido, (err) => {
-                if (err) {
-                    reject('Error leyendo...');
-                } else {
-                    //devolver contenido
-                    resolve(contenido)
-                }
-            })
+            reject('Error leyendo...');
         } else {
-            fs.writeFile(nombreArchivo, contenidoLeidoDelArchivo + contenido, (err) => {
-                if (err) {
-                    reject('Error escribiendo...');
-                } else {
-                    //devolver contenido
-                    resolve(contenidoLeidoDelArchivo + contenido);
-                }
-            })
+            resolve(contenido)
+        }
+    })
+});
+
+const leerArchivo = (nombreArchivo) => new Promise((resolve, reject) => {
+    fs.readFile(nombreArchivo, 'utf-8', (error, contenidoLeidoArchivo) => {
+        if (error) {
+            reject(error);
+        } else {
+            resolve(contenidoLeidoArchivo)
         }
     });
 });
 
-function appendFile(nombreArchivo, contenido, callback) {
-    fs.readFile(nombreArchivo, 'utf-8', (error, contenidoLeidoDelArchivo) => {
-        if (error) {
-            fs.writeFile(nombreArchivo, contenido, (err) => {
-                if (err) {
-                    console.error('Error leyendo...');
-                    callback(undefined, 'Error leyendo...');
-                } else {
-                    //devolver contenido
-                    callback(contenido)
-                }
-            })
-        } else {
-            fs.writeFile(nombreArchivo, contenidoLeidoDelArchivo + contenido, (err) => {
-                if (err) {
-                    console.error('Error escribiendo...');
-                    callback(undefined, 'Error escribiendo...');
-                } else {
-                    //devolver contenido
-                    callback(contenidoLeidoDelArchivo + contenido);
-                }
-            })
-        }
+const appendFilePromise = (nombreArchivo, contenido) => new Promise(resolve => {
+    leerArchivo(nombreArchivo).then(contenidoLeidoDelArchivo => {
+        resolve(escribirArchivo(nombreArchivo, contenidoLeidoDelArchivo + contenido));
+    }).catch(() => {
+        resolve(escribirArchivo(nombreArchivo, contenido));
     });
-}
-
-const respuestaAppendFile = appendFile('06-ejemplo.txt', 'Hola amigos', (res, err) => {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log(res);
-    }
 });
-console.log(respuestaAppendFile);
 
-
-appendFilePromise('06-ejemplo.txt', 'Hola amigos')
+appendFilePromise('wrad_file.txt', 'aloja')
+    .then()
     .then(value => console.log(value))
     .catch(reason => console.log(reason));
