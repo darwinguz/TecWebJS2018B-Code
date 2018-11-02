@@ -97,3 +97,38 @@ function ejercicio(arregloString, cb) {
 ejercicio(['A', 'B', 'C'], (respuestaEjercicio) => {
     console.log(respuestaEjercicio)
 });
+
+const escribirArchivo = (nombreArchivo, contenido) => new Promise((resolve, reject) => {
+    fs.writeFile(nombreArchivo, contenido, (error) => {
+        if (error) {
+            reject('Error leyendo...');
+        } else {
+            resolve(contenido)
+        }
+    })
+});
+
+const ejercicioConPromesas = async (arregloString) => {
+    const respuestas = [];
+    arregloString.forEach(async (string, indice) => {
+        const nombreArchivo = `${indice}-${string}.txt`;
+        const contenido = string;
+        let errorEscribirArchivo;
+        try {
+            await escribirArchivo(nombreArchivo, contenido);
+        } catch (e) {
+            errorEscribirArchivo = e;
+        }
+        const respuesta = {
+            nombreArchivo: nombreArchivo,
+            contenidoArchivo: contenido,
+            error: errorEscribirArchivo
+        };
+        respuestas.push(respuesta);
+        const estaCompletoArreglo = respuestas.length === arregloString.length;
+        if (estaCompletoArreglo) {
+            return respuestas;
+        }
+    })
+};
+ejercicioConPromesas(['A2', 'B2', 'C2']).then(value => console.log(value)).catch(reason => console.log(reason));
