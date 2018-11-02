@@ -132,3 +132,27 @@ const ejercicioConPromesas = async (arregloString) => {
     })
 };
 ejercicioConPromesas(['A2', 'B2', 'C2']).then(value => console.log(value)).catch(reason => console.log(reason));
+
+const ejercicioConPromesas2 = async (arregloString) => {
+    const respuestas = [];
+    await Promise.all(
+        arregloString.map(async (string, indice) => {
+            const nombreArchivo = `${indice}-${string}.txt`;
+            const contenido = string;
+            let errorEscribirArchivo;
+            try {
+                await escribirArchivo(nombreArchivo, contenido);
+            } catch (e) {
+                errorEscribirArchivo = e;
+            }
+            const respuesta = {
+                nombreArchivo: nombreArchivo,
+                contenidoArchivo: contenido,
+                error: errorEscribirArchivo
+            };
+            respuestas.push(respuesta);
+        })
+    )
+    return respuestas;
+};
+ejercicioConPromesas2(['A3', 'B3', 'C3']).then(value => console.log(value)).catch(reason => console.log(reason));
