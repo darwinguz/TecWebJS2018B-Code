@@ -36,34 +36,33 @@ const promesita = (correcto) => {
     );
 };
 
+console.log('///////////////////////////////////////');
 const promesita$ = rxjs.from(promesita(true));
 const promesitaNoOk$ = rxjs.from(promesita(true));
-
-
 numeros$
     .pipe(
         concat(promesitaNoOk$), // Reject
         concat(promesita$), // Resolve
     )
-    .pipe(
-        distinct(),
-        map(
-            (valorActual) => {
-                return {
-                    data: valorActual
-                };
-            }
-        )
-    )
+    // .pipe(
+    //     distinct(),
+    //     map(
+    //         (valorActual) => {
+    //             return {
+    //                 data: valorActual
+    //             };
+    //         }
+    //     )
+    // )
     .subscribe(
         (ok) => {
-            console.log('En ok', ok);
+            console.log('En ok prom', ok);
         },
         (error) => {
-            console.log('Error', error);
+            console.log('Error prom', error);
         },
         () => { // complete
-            console.log('Completado');
+            console.log('Completado prom');
         }
     );
 

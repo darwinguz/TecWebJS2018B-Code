@@ -14,20 +14,26 @@ var promesita = function (correcto) {
         }
     });
 };
+console.log('///////////////////////////////////////');
 var promesita$ = rxjs.from(promesita(true));
 var promesitaNoOk$ = rxjs.from(promesita(true));
 numeros$
     .pipe(concat(promesitaNoOk$), // Reject
 concat(promesita$))
-    .pipe(distinct(), map(function (valorActual) {
-    return {
-        data: valorActual
-    };
-}))
+    // .pipe(
+    //     distinct(),
+    //     map(
+    //         (valorActual) => {
+    //             return {
+    //                 data: valorActual
+    //             };
+    //         }
+    //     )
+    // )
     .subscribe(function (ok) {
-    console.log('En ok', ok);
+    console.log('En ok prom', ok);
 }, function (error) {
-    console.log('Error', error);
+    console.log('Error prom', error);
 }, function () {
-    console.log('Completado');
+    console.log('Completado prom');
 });
